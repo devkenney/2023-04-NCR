@@ -1,7 +1,9 @@
+import Product from "./Product"
+
 export default function ProductList (props) {
   return (
     <ul>
-      <li>{props.product.name}</li>
+      <Product product={props.product} />
     </ul>
   )
 }
