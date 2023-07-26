@@ -5,7 +5,9 @@ import Player from './components/Player';
 import Board from './components/Board';
 import { createContext, useReducer } from 'react';
 import Counter from './components/Counter';
-import counterContext from './context';
+import CounterContext from './context';
+import IsEven from './components/IsEven'
+import ChildExample from './components/ChildExample';
 
 function App() {
 
@@ -34,11 +36,16 @@ function App() {
       <Player whichPlayer='X' />
       <Player whichPlayer='O' />
       <Board />
-      <counterContext.Provider
+      <CounterContext.Provider
         value={{ state, dispatch }}
       >
         <Counter />
-      </counterContext.Provider>
+      </CounterContext.Provider>
+
+      <IsEven number={3} />
+
+      <ChildExample><h1>Hello World!</h1></ChildExample>
+
     </div>
   );
 }
