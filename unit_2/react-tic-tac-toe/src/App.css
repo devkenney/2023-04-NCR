@@ -69,3 +69,26 @@ h1 {
   text-align: center;
 
 }
+
+.enabled {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.5);
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.disabled {
+  display: none;
+}
+
+.modal-card {
+  background-color: var(--yankees-blue);
+  min-width: 20em;
+  max-width: 35em;
+  padding: 1em;
+}
