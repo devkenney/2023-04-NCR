@@ -50,7 +50,7 @@ app.post('/fruits', (req, res) => {
 
   Fruit.create(req.body)
     .then((createdFruit) => {
-      res.send(createdFruit)
+      res.redirect('/fruits')
     })
     .catch(error => {
       console.error(error)
@@ -60,8 +60,16 @@ app.post('/fruits', (req, res) => {
 // Edit
 
 // Show
-app.get('/fruits/:index', (req, res) => {
-  res.send(fruits[req.params.index])
+app.get('/fruits/:id', (req, res) => {
+  Fruit.findOne({ _id: req.params.id })
+    .then((foundFruit) => {
+      res.render('Show', {
+        fruit: foundFruit
+      })
+    })
+    .catch(error => {
+      console.error(error)
+    })
 })
 
 app.listen(3000, () => {
