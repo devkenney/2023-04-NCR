@@ -4,8 +4,10 @@ const app = express();
 const fruits = require('./models/fruits')
 const mongoose = require('mongoose');
 const Fruit = require('./models/Fruit');
+const methodOverride = require('method-override');
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'))
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 
@@ -37,8 +39,29 @@ app.get('/fruits/new', (req, res) => {
 })
 
 // Delete
+app.delete('/fruits/:id', (req, res) => {
+  Fruit.deleteOne({ _id: req.params.id })
+    .then(info => {
+      console.log(info)
+      res.redirect('/fruits')
+    })
+    .catch(error => console.log(error))
+})
 
 // Update
+app.put('/fruits/:id', (req, res) => {
+  if (req.body.readyToEat === 'on') {
+    req.body.readyToEat = true;
+  } else {
+    req.body.readyToEat = false;
+  }
+
+  Fruit.updateOne({ _id: req.params.id }, req.body)
+    .then(info => {
+      console.log(info);
+      res.redirect(`/fruits/${req.params.id}`)
+    })
+})
 
 // Create
 app.post('/fruits', (req, res) => {
@@ -57,7 +80,39 @@ app.post('/fruits', (req, res) => {
     })
 });
 
+app.get('/fruits/seed', (req, res) => {
+  Fruit.insertMany([
+    {
+      name: 'grapefruit',
+      color: 'pink',
+      readyToEat: true
+    },
+    {
+      name: 'grape',
+      color: 'purple',
+      readyToEat: false
+    },
+    {
+      name: 'avocado',
+      color: 'green',
+      readyToEat: true
+    }
+  ])
+})
+
 // Edit
+app.get('/fruits/:id/edit', (req, res) => {
+  Fruit.findOne({ _id: req.params.id })
+    .then(foundFruit => {
+      res.render(
+        'Edit',
+        {
+          fruit: foundFruit
+        }
+      )
+    })
+    .catch(error => console.log(error))
+})
 
 // Show
 app.get('/fruits/:id', (req, res) => {
