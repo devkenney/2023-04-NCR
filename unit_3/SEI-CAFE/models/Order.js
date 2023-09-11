@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const itemSchema = './itemSchema'
 
 const lineItemSchema = new Schema({
   qty: { type: Number, default: 1 },
-  item: itemSchema
+  item: { type: Schema.Types.ObjectId, ref: "Item" }
 }, {
   timestamps: true,
   toJSON: { virtuals: true }
@@ -45,7 +44,7 @@ orderSchema.statics.getCart = function(userId) {
 orderSchema.methods.addItemTOCart = async function(itemId) {
   const cart = this;
 
-  const lineItem = cart.lineItems.find(lineItem => lineItem.item._id.equals(itemId));
+  const lineItem = cart.lineItems.find(lineItem => lineItem.item._id.equals(itemId)).populate().exec();
   if (lineItem) {
     lineItem.qty += 1;
   } else {
@@ -58,7 +57,7 @@ orderSchema.methods.addItemTOCart = async function(itemId) {
 orderSchema.methods.setItemQty = function(itemId, newQty) {
   const cart = this;
 
-  const lineItem = cart.lineItems.find(lineItem => lineItem.item._id.equals(itemId));
+  const lineItem = cart.lineItems.find(lineItem => lineItem.item._id.equals(itemId)).populate().exec();
 
   if (lineItem && newQty <= 0) {
     lineItem.remove();
